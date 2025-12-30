@@ -16,6 +16,7 @@ re: clean all
 clean: down
 	docker system prune -a
 	sudo rm -rf ~/data
+	rm -f srcs/requirements/nginx/tools/*.crt srcs/requirements/nginx/tools/*.key
 
 fclean: clean 
 	docker system prune --all --force --volumes

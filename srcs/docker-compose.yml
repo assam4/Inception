@@ -22,13 +22,9 @@ services:
       args:
         DB_NAME: ${DB_NAME}
         DB_USER: ${DB_USER}
-        DB_PASS: ${DB_PASS}
-        DB_ROOT: ${DB_ROOT}
     environment:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
-      DB_ROOT: ${DB_ROOT}
     networks:
       - inception
     container_name: mariadb
@@ -44,19 +40,16 @@ services:
       args:
         DB_NAME: ${DB_NAME}
         DB_USER: ${DB_USER}
-        DB_PASS: ${DB_PASS}
     environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
       WP_PATH: ${WP_PATH}
       SITE_URL: ${SITE_URL}
       SITE_TITLE: ${SITE_TITLE}
       ADMIN_USER: ${ADMIN_USER}
-      ADMIN_PASS: ${ADMIN_PASS}
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       SIMPLE_USER: ${SIMPLE_USER}
-      SIMPLE_PASS: ${SIMPLE_PASS}
       SIMPLE_EMAIL: ${SIMPLE_EMAIL}
     networks:
       - inception
