@@ -2,10 +2,7 @@ FROM alpine:3.16
 
 ARG	PHP_VERSION=8 DB_NAME DB_USER 
 
-RUN	export ADMIN_PASS=$(awk -F: '/^superuser:/ {print $2}' /secrets/credentials.txt); \
-	export SIMPLE_PASS=$(awk -F: '/^simpleuser:/ {print $2}' /secrets/credentials.txt); \
-	export DB_PASS=$(cat /secrets/db_password.txt); \
-	apk update && \
+RUN	apk update && \
 	apk upgrade && \
 	apk add --no-cache \
 		php${PHP_VERSION}-phar \

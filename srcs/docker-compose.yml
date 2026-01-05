@@ -1,21 +1,6 @@
 #version: '3'
 
 services:
-  nginx:
-    build: requirements/nginx/
-    container_name: nginx
-    networks:
-      - inception
-    depends_on:
-      - wordpress
-    ports:
-        - "443:443"
-    volumes:
-      - ./requirements/nginx/conf/:/etc/nginx/http.d/
-      - ./requirements/nginx/tools:/etc/nginx/ssl/
-      - wp-volume:/var/www/
-    restart: always
-
   mariadb:
     build:
       context: requirements/mariadb/
@@ -25,14 +10,14 @@ services:
     environment:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
+    container_name: mariadb
     networks:
       - inception
-    container_name: mariadb
     ports:
       - "3306:3306"
-    restart: always
     volumes:
       - db-volume:/var/lib/mysql
+    restart: always
 
   wordpress:
     build:
@@ -40,37 +25,46 @@ services:
       args:
         DB_NAME: ${DB_NAME}
         DB_USER: ${DB_USER}
-    environment:
-      DOMAIN_NAME: ${DOMAIN_NAME}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      WP_PATH: ${WP_PATH}
-      SITE_URL: ${SITE_URL}
-      SITE_TITLE: ${SITE_TITLE}
-      ADMIN_USER: ${ADMIN_USER}
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      SIMPLE_USER: ${SIMPLE_USER}
-      SIMPLE_EMAIL: ${SIMPLE_EMAIL}
+    env_file:
+      - .env
+    container_name: wordpress
     networks:
       - inception
-    container_name: wordpress
     volumes:
       - wp-volume:/var/www/
     secrets:
-      - credentials
-      - db_password
-      - db_root_password
+      - wordpress_superpass
+      - wordpress_simplepass
+      - mariadb_db_password
+      - mariadb_db_root_password
     depends_on:
       - mariadb
     restart: always
+ 
+  nginx:
+    build: requirements/nginx/
+    container_name: nginx
+    networks:
+      - inception
+    ports:
+        - "443:443"
+    volumes:
+      - ./requirements/nginx/conf/:/etc/nginx/http.d/
+      - ./requirements/nginx/tools:/etc/nginx/ssl/
+      - wp-volume:/var/www/
+    depends_on:
+      - wordpress
+    restart: always
 
 secrets:
-  credentials:
-    file: ../secrets/credentials.txt
-  db_password:
-    file: ../secrets/db_password.txt
-  db_root_password:
-    file: ../secrets/db_root_password.txt
+  wordpress_superpass:
+    file: ../secrets/wordpress/superpass.txt
+  wordpress_simplepass:
+    file: ../secrets/wordpress/simplepass.txt
+  mariadb_db_password:
+    file: ../secrets/mariadb/db_password.txt
+  mariadb_db_root_password:
+    file: ../secrets/mariadb/db_root_password.txt
 
 volumes:
   wp-volume:
@@ -78,7 +72,6 @@ volumes:
       o: bind
       type: none
       device: /home/${USER}/data/wordpress
-
   db-volume:
     driver_opts:
       o: bind

@@ -1,7 +1,8 @@
 #!/bin/sh
 
-export ADMIN_PASS=$(awk -F: '/^superuser:/ {print $2}' /run/secrets/credentials 2>/dev/null || true)
-export SIMPLE_PASS=$(awk -F: '/^simpleuser:/ {print $2}' /run/secrets/credentials 2>/dev/null || true)
+export ADMIN_PASS=$(cat /run/secrets/wordpress_superpass 2>/dev/null || true)
+export SIMPLE_PASS=$(cat /run/secrets/wordpress_simplepass 2>/dev/null || true)
+export DB_PASS=$(cat /secrets/mariadb/db_password.txt)
 
 set -e
 

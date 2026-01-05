@@ -2,9 +2,7 @@ FROM alpine:3.16
 
 ARG DB_NAME DB_USER
 
-RUN export DB_PASS=$(cat /secrets/db_password.txt); \
-    export DB_ROOT=$(cat /secrets/db_root_password.txt); \
-    apk update &&  \
+RUN apk update &&  \
     apk add --no-cache mariadb mariadb-client && \
     mkdir /var/run/mysqld; \
     chmod 777 /var/run/mysqld; \
