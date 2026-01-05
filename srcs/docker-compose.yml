@@ -56,9 +56,21 @@ services:
     container_name: wordpress
     volumes:
       - wp-volume:/var/www/
+    secrets:
+      - credentials
+      - db_password
+      - db_root_password
     depends_on:
       - mariadb
     restart: always
+
+secrets:
+  credentials:
+    file: ../secrets/credentials.txt
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
 
 volumes:
   wp-volume:
