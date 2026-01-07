@@ -59,6 +59,17 @@ services:
       - wordpress
     restart: always
 
+  redis:
+    build: requirements/bonus/redis
+    container_name: redis
+    networks:
+      - inception
+    ports:
+      - "6379:6379"
+    volumes:
+      - rd-volume:/data
+    restart: always
+
 secrets:
   wordpress_superpass:
     file: ../secrets/wordpress/superpass.txt
@@ -80,6 +91,11 @@ volumes:
       o: bind
       type: none
       device: /home/${USER}/data/mariadb
+  rd-volume:
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/${USER}/data/redis
 
 networks:
   inception:
