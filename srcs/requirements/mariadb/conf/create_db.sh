@@ -21,6 +21,7 @@ if [ ! -d "/var/lib/mysql/wordpress" ]; then
 USE mysql;
 FLUSH PRIVILEGES;
 DELETE FROM     mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
 CREATE DATABASE ${DB_NAME} CHARACTER SET utf8 COLLATE utf8_general_ci;
 CREATE USER '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';
 GRANT ALL PRIVILEGES ON wordpress.* TO '${DB_USER}'@'%';
