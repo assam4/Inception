@@ -69,6 +69,24 @@ services:
     volumes:
       - rd-volume:/data
     restart: always
+  
+  ftp:
+    build: requirements/bonus/ftp
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+    container_name: ftp
+    networks:
+      - inception
+    ports:
+      - "21:21"
+      - "6000-6100:6000-6100"
+    volumes:
+      - wp-volume:/var/www/
+    secrets:
+      - wordpress_simplepass
+    depends_on:
+      - wordpress
+    restart: always
 
 secrets:
   wordpress_superpass:
