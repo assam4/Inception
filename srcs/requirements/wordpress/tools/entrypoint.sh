@@ -10,5 +10,6 @@ sh /usr/local/bin/wp-config-create.sh
 sh /usr/local/bin/wp-init-users.sh
 
 wp plugin install redis-cache --activate --allow-root
+wp redis enable --allow-root
 
 exec /usr/sbin/php-fpm8 -F
