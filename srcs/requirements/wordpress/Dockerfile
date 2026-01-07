@@ -8,6 +8,7 @@ RUN	apk update && \
 		php${PHP_VERSION}-phar \
 	  	php${PHP_VERSION} \
 		php${PHP_VERSION}-fpm \
+		php${PHP_VERSION}-ctype \
 		php${PHP_VERSION}-mysqli \
 		php${PHP_VERSION}-json \
 		php${PHP_VERSION}-curl \

@@ -18,8 +18,8 @@ RUN apk update &&  \
 EXPOSE 3306
 
 COPY conf/create_db.sh .
+COPY tools/entrypoint.sh .
 
-RUN sh create_db.sh && rm create_db.sh
-
+RUN chmod +x entrypoint.sh
 USER mysql
-CMD ["/usr/bin/mysqld", "--skip-log-error"]
+CMD ["sh", "/entrypoint.sh"]

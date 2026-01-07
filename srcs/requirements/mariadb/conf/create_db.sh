@@ -1,4 +1,6 @@
-#!bin/sh
+#!/bin/sh
+
+export DB_PASS=$(cat /run/secrets/mariadb_db_password 2>/dev/null || true)
 
 if [ ! -d "/var/lib/mysql/mysql" ]; then
 
@@ -19,10 +21,6 @@ if [ ! -d "/var/lib/mysql/wordpress" ]; then
 USE mysql;
 FLUSH PRIVILEGES;
 DELETE FROM     mysql.user WHERE User='';
-DROP DATABASE test;
-DELETE FROM mysql.db WHERE Db='test';
-DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
-ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT}';
 CREATE DATABASE ${DB_NAME} CHARACTER SET utf8 COLLATE utf8_general_ci;
 CREATE USER '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';
 GRANT ALL PRIVILEGES ON wordpress.* TO '${DB_USER}'@'%';
