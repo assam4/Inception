@@ -90,6 +90,15 @@ services:
       - wordpress
     restart: always
 
+  adminer:
+    build: requirements/bonus/adminer
+    container_name: adminer
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    restart: always
+
 secrets:
   wordpress_superpass:
     file: ../secrets/wordpress/superpass.txt
