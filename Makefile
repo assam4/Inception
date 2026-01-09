@@ -15,6 +15,7 @@ up:
 down:
 	@docker compose -f ./srcs/docker-compose.yml --env-file ${ENV} down | grep -E "Stopping|Stopped" || true
 clean: down
+	@docker volume rm $$(docker volume ls -q | grep srcs_) 2>/dev/null || true
 	sudo rm -rf ~/data
 	@echo "Cleaning volumes"
 fclean: clean 
