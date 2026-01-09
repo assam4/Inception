@@ -1,22 +1,26 @@
-NAME = inception
-ENV = srcs/.env
+NAME := inception
+ENV := srcs/.env
+SSL_CERTS := srcs/requirements/nginx/tools/*.key srcs/requirements/nginx/tools/*.crt
+DIRS := ~/data/mariadb/  ~/data/wordpress ~/data/redis
 
 all:
-	mkdir -p ~/data/mariadb/  ~/data/wordpress ~/data/redis
-	docker compose -f ./srcs/docker-compose.yml --env-file ${ENV} up -d
+	@mkdir -p ${DIRS}
+	@docker compose -f ./srcs/docker-compose.yml --env-file ${ENV} up -d | grep -E "Building|Build|Created|Starting|Started|Running" || true
 build:
-	mkdir -p ~/data/mariadb/  ~/data/wordpress
-	docker compose -f ./srcs/docker-compose.yml --env-file ${ENV} up -d --build
+	@mkdir -p ${DIRS}
+	@docker compose -f ./srcs/docker-compose.yml --env-file ${ENV} build --no-cache | grep -E "Building|Build|Recreated|Created" || true
+up:
+	@docker compose -f ./srcs/docker-compose.yml --env-file ${ENV} up -d | grep -E "Starting|Started|Running" || true
 
 down:
-	docker compose -f ./srcs/docker-compose.yml --env-file ${ENV} down
-
-re: fclean all
-
+	@docker compose -f ./srcs/docker-compose.yml --env-file ${ENV} down | grep -E "Stopping|Stopped" || true
 clean: down
 	sudo rm -rf ~/data
-
+	@echo "Cleaning volumes"
 fclean: clean 
-	docker system prune --all --force --volumes
+	@rm -f ${SSL_CERTS}
+	@echo "Cleaning ssl_certificate"
+	@docker system prune --all --force --volumes | grep -E "Removing|Removed|password" || true
+re: fclean all
 
-.PHONY	: all build down re clean fclean
+.PHONY	: all build up  down re clean fclean

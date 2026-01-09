@@ -22,6 +22,8 @@ define('WP_CACHE_KEY_SALT', 'saslanya_42_fr');
 define( 'WP_REDIS_TIMEOUT', 1 );
 define( 'WP_REDIS_READ_TIMEOUT', 1 );
 define( 'WP_REDIS_DATABASE', 0 );
+define('SMTP', 'smtp');
+define('SMTP_PORT', 1025);
 require_once ABSPATH . 'wp-settings.php';
 EOF
 fi

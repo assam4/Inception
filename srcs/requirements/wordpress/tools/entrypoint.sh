@@ -12,4 +12,9 @@ sh /usr/local/bin/wp-init-users.sh
 wp plugin install redis-cache --activate --allow-root
 wp redis enable --allow-root
 
+# Configure msmtp for mail sending
+cp /usr/local/bin/msmtprc /etc/msmtprc
+chmod 600 /etc/msmtprc
+echo "sendmail_path = \"/usr/bin/msmtp -t\"" > /etc/php8/conf.d/msmtp.ini
+
 exec /usr/sbin/php-fpm8 -F

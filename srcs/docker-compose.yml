@@ -42,6 +42,7 @@ services:
       - mariadb_db_root_password
     depends_on:
       - mariadb
+      - redis
     restart: always
  
   nginx:
@@ -97,6 +98,15 @@ services:
       - inception
     depends_on:
       - mariadb
+    restart: always
+
+  smtp:
+    build: requirements/bonus/smtp
+    container_name: smtp
+    ports:
+      - "1025:1025"
+    networks:
+      - inception
     restart: always
 
 secrets:
